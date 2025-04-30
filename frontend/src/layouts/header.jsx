@@ -1,18 +1,20 @@
 import { useTheme } from "@/hooks/use-theme";
-import { useState,useEffect } from 'react';
+import { useState,useEffect, memo } from 'react';
 import { Bell, ChevronsLeft, Moon, Search, Sun } from "lucide-react";
 import profileImg from "@/assets/profile-image.jpg";
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import { useSocket } from "@/contexts/SocketContext";
 
-export const Header = ({ collapsed, setCollapsed,socket }) => {
+export const Header = ({ collapsed, setCollapsed }) => {
     const { theme, setTheme } = useTheme();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [taskData, setTaskData] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
     const navigate = useNavigate();
-
+    const socket = useSocket();
   const handleMouseEnter = () => {
     setIsDropdownOpen(true);
   };
@@ -23,11 +25,17 @@ export const Header = ({ collapsed, setCollapsed,socket }) => {
 
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const handleNewTask = (newTask) => {
-    setTaskData((prevTasks) => [...prevTasks, newTask]);
-  };
-
   const handleMouseOver = () => {
+    const hasUnread = taskData.filter(task => !task.read);
+    console.log('Has unread tasks:', hasUnread);
+    if (hasUnread) {
+      setTaskData((prevTasks) =>
+        prevTasks.map(task => ({ ...task, read: true }))
+      );
+  
+      socket.emit("read_task", hasUnread);
+    }
+  
     setShowNotifications(true);
   };
 
@@ -80,6 +88,7 @@ export const Header = ({ collapsed, setCollapsed,socket }) => {
   useEffect(() => {
     if (!socket) {
       console.log('Socket is null or undefined');
+      fetchNotifications();
       return;
     }
     console.log(`Socket connected: ${socket}`);
@@ -88,13 +97,65 @@ export const Header = ({ collapsed, setCollapsed,socket }) => {
       console.log('Task Assigned To:', taskData.assignedUser);
       console.log('Message:', taskData.message);
       console.log('Project ID:', taskData.projectid);
-      let arr = [{message: taskData.message, projectid: taskData.projectid}];
+      let arr = [{message: taskData.message, projectid: taskData.projectid,read:false}];
       setTaskData(arr);
       console.log('Task Data:', taskData);
 
       // ... further processing
     });
+
+    //fetch notification
+   async function fetchNotifications(){
+      try {
+        console.log('Fetching notifications...');
+        const token = localStorage.getItem('token');
+        // const userId = JSON.parse(localStorage.getItem('user'))?.id; 
+        const response = await axios.get('http://localhost:5000/api/notifications', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
+        console.log(response.data, 'Notification data fetched successfully');
+        const result = response.data;
+        setTaskData(prevTasks => {
+          return [...prevTasks, ...result];
+        });
+        console.log(response, 'Notification data fetched successfully');
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchNotifications();
+    console.log(taskData, 'task data from socket io');
+    return () => {
+      if(socket) {
+        socket.disconnect();
+        console.log('Socket disconnected');
+    }
+  }
   }, []);
+
+  useEffect(() => {
+    console.log('Task data updated:', taskData);
+    const unreadcount = taskData.filter(task => task.read === false).length;
+    setUnreadCount(unreadcount);
+  }
+, [taskData]);
+
+useEffect(() => {
+  if (!socket) return;
+
+  socket.on('task_assigned', (data) => {
+      console.log('Task assigned notification received:', data);
+      // Update your notifications or task data here
+      setTaskData((prev) => [...prev, data]);
+  });
+
+  return () => {
+      socket.off('task_assigned'); // Clean up the listener
+  };
+}, [socket]);
      
 
     return (
@@ -143,7 +204,7 @@ export const Header = ({ collapsed, setCollapsed,socket }) => {
         {taskData.length > 0 && (
           <>
             <div className="absolute -top-1 right-0 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs">
-              {taskData.length}
+              {unreadCount}
             </div>
           </>
         )}
@@ -152,17 +213,19 @@ export const Header = ({ collapsed, setCollapsed,socket }) => {
 
       {showNotifications && taskData.length > 0 && (
         <div
-          className="absolute right-0 top-full mt-2 bg-white border border-gray-300 rounded-md shadow-md p-4 w-64 z-10"
+          className="absolute right-0 top-full mt-2 bg-white border border-gray-300 rounded-md shadow-md p-4 w-64 z-10 overflow-y-auto max-h-60"
         >
           <h3 className="font-semibold mb-2">Notifications</h3>
           <ul>
             {taskData.map((task, index) => (
+              
               <li
                 key={index}
                 className="py-1 border-b last:border-b-0 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleNotificationClick(task.projectid)}
+                onClick={() => handleNotificationClick(task.projectid || task.projectId)}
               >
-                {task.message} (Project ID: {task.projectid})
+                <h3 className="font-semibold">{task.message}</h3>
+                <p className="text-sm text-gray-600">Project ID: {task.projectid}</p>
               </li>
             ))}
           </ul>

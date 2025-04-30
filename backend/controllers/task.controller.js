@@ -1,5 +1,5 @@
 const Task = require('../models/task.model.js');
-
+const Notification = require('../models/notification.model.js');
 exports.createTask = async (req, res) => {
   const { title, description, priority, status, project, assignedUser } = req.body;
 const task =  await Task.create({
@@ -9,6 +9,12 @@ const task =  await Task.create({
     status,
     project,
     assignedUser
+  });
+
+ await Notification.create({
+    user: assignedUser,
+    message: `New task "${title}" has been assigned to you.`,
+    projectid: project,
   });
    
   res.status(201).json(task);

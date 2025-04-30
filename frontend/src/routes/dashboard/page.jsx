@@ -6,9 +6,24 @@ import { NavLink } from 'react-router-dom';
 
 import { TrendingUp, Users } from "lucide-react";
 import React, { useEffect, useState } from 'react';
+import { useSocket } from "@/contexts/SocketContext";
 
 const DashboardPage = () => {
     const [data, setData] = useState(null);
+   
+    const socket = useSocket();
+
+    useEffect(() => {
+        if (socket) {
+            console.log("Socket is available globally:", socket.id);
+            socket.on("connect", () => {
+                console.log("Socket connected", socket.id);
+                localStorage.setItem("socketId", socket.id);
+                socket.emit("register_user", JSON.parse(localStorage.getItem("user"))?.id);
+            });
+        }
+    }, [socket]);
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token'); // or whichever key you store the token under
@@ -22,7 +37,7 @@ const DashboardPage = () => {
         })
         .catch((err) => {
           console.log(err, 'error');
-        });
+        }); 
       }, []);
       
     
@@ -38,7 +53,7 @@ const DashboardPage = () => {
                         <p className="card-title">Project Summary</p>
                     </div>
                     <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
-                    <NavLink to="/users" className="block">
+                    <NavLink to="/projects" className="block">
                         <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Open : {data?.projectSummary?.open}</p>
                         <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">In-Progress : {data?.projectSummary["in-progress"]}</p>
                         <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Completed : {data?.projectSummary?.completed}</p>
@@ -82,7 +97,7 @@ const DashboardPage = () => {
                         <p className="card-title">Upcoming Deadlines</p>
                     </div>
                     <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
-                    <NavLink to="/tasks" className="block">
+                    <NavLink to="/projects" className="block">
                     {data?.upcomingDeadlines?.length > 0 ? (
                     data?.upcomingDeadlines.map((item, index) => (
                         <div key={index} className="mb-4">

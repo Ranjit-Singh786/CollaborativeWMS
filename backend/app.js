@@ -4,6 +4,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth.route.js');
 const projectRoutes = require('./routes/project.route.js');
 const taskRoutes = require('./routes/task.route.js');
+const notificationRoutes = require('./routes/notification.route.js');
 const connectDB = require('./config/db.js');
 const { initSocket } = require('./socket');
 const app = express();
@@ -19,6 +20,7 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 
 const PORT = process.env.PORT || 5000;

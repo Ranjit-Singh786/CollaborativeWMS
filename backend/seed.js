@@ -14,8 +14,8 @@ mongoose
 
 // Dummy data
 const users = [
-  { name: 'John Doe', email: 'johnadmin@example.com', password: 'password123', role: 'Admin' },
-  { name: 'Jane Smith', email: 'jane@example.com', password: 'password123', role: 'User' },
+  { name: 'John Doe', email: 'johnadmin@gmail.com', password: '123456', role: 'Admin' },
+  { name: 'Jane Smith', email: 'jane@gmail.com', password: '123456', role: 'User' },
 ];
 
 // Hash passwords

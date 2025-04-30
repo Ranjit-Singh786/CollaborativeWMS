@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { showSuccessMessage } from '../../utils/SwalMessages';
+import { showSuccessMessage,showErrorMessage } from '../../utils/SwalMessages';
 import { useNavigate } from 'react-router-dom';
 
 const Page = () => {
@@ -68,6 +68,8 @@ const getProjects =()=>{
       });
     } catch (err) {
       console.error('Error creating project:', err);
+      showErrorMessage('Project Creation Failed!',err?.response?.data?.error ||err?.message);
+
     }
   };
 
@@ -125,6 +127,7 @@ const getProjects =()=>{
       showSuccessMessage('Project Deleted!', 'The project was Deleted successfully.');
     } catch (err) {
       console.error('Error deleting project:', err);
+      showErrorMessage('Project Deletion Failed!', err?.response?.data?.error || err?.message);
     }
   };
 

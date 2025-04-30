@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { showSuccessMessage } from '../../utils/SwalMessages';
+import { useSocket } from '../../contexts/SocketContext';
 
-const Page = ({socket}) => {
+const Page = () => {
     const [searchParams] = useSearchParams();
   const projectId = searchParams.get('p_id');
   const [tasks, setTasks] = useState([]);
@@ -20,6 +21,7 @@ const Page = ({socket}) => {
     dueDate: '',
   });
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const socket = useSocket();
 
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
