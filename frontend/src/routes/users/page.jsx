@@ -188,8 +188,8 @@ const getusers =()=>{
                 <td className="py-2 px-4 border text-center">{user.name}</td>
                 <td className="py-2 px-4 border text-center">{user.email}</td>
                 <td className="py-2 px-4 border text-center">{user.role}</td>
-                <td className="py-2 px-4 border text-center">
                   {role !=="User" &&  
+                <td className="py-2 px-4 border text-center">
                  <>
                  <button
                     onClick={() => handleEdit(user)}
@@ -204,8 +204,8 @@ const getusers =()=>{
                     Delete
                   </button>
                   </>
-                  }
                 </td>
+                  }
               </tr>
             ))}
           </tbody>

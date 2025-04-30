@@ -1,12 +1,21 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from "axios";
 
-const LoginPage = () => {
+const LoginPage = ({socket}) => {
+  const [user, setUser] = React.useState({});
+  useEffect(() => {
+    console.log(user, 'user from local storage');
+    if (user) {
+      socket?.emit("register_user", user.id);
+    }
+  }, [user]);
+
     const navigate = useNavigate();
+    
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -29,8 +38,11 @@ const LoginPage = () => {
         });
 
       if(response?.data?.status==201){
+        setUser(response?.data?.user);
         localStorage.setItem("token",response?.data?.token);
         localStorage.setItem("role",response?.data?.user?.role);
+        localStorage.setItem("user",JSON.stringify(response?.data?.user));
+       
         Swal.fire({
             icon: 'success',
             title: 'Login Successful!',

@@ -3,11 +3,14 @@ import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { showSuccessMessage } from '../../utils/SwalMessages';
 
-const Page = () => {
+const Page = ({socket}) => {
     const [searchParams] = useSearchParams();
   const projectId = searchParams.get('p_id');
   const [tasks, setTasks] = useState([]);
+  const [statusFilter, setStatusFilter] = useState('');
   const [users, setUsers] = useState([]);
+  const [isSocketState, setSocketState] = useState(false);
+  const [assignUsr, setAssignusr] = useState({});
   const [taskForm, setTaskForm] = useState({
     title: '',
     description: '',
@@ -20,6 +23,27 @@ const Page = () => {
 
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
+
+  const handleStatusChange = (event) => {
+    setStatusFilter(event.target.value);
+  };
+
+  function getTasks(){
+    if (!projectId) return;
+    axios
+      .get(`http://localhost:5000/api/tasks/project/${projectId}`, {
+        headers: { Authorization: `Bearer ${token}` }, params: {
+          status: statusFilter, 
+        },
+      })
+      .then((res) => setTasks(res.data))
+      .catch((err) => console.error('Error fetching tasks:', err));
+  }
+
+  useEffect(() => {
+    getTasks();
+  }, [statusFilter]);
+       
 
   // Fetch tasks for a given project
   useEffect(() => {
@@ -40,10 +64,19 @@ const Page = () => {
 
   }, [projectId]);
 
+  useEffect(() => {
+    if (!socket) return;
+    socket.emit('assign_task', {
+      message: `You've been added to a new project: ${assignUsr.title}`,
+      projectid: assignUsr.project, 
+      title: assignUsr.title,
+      assignedUser: assignUsr.assignedUser  // This should be a Mongo _id
+    });
+  }, [socket, assignUsr?.assignedUser]);
+
   const handleChange = (e) => {
     setTaskForm({ ...taskForm, [e.target.name]: e.target.value });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,11 +91,17 @@ const Page = () => {
       const res = await method(endpoint, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      
+
       setTasks((prev) =>
         editingTaskId
           ? prev.map((task) => (task._id === res.data._id ? res.data : task))
           : [...prev, res.data]
       );
+      // console.log(payload, 'payload');
+      if(!editingTaskId){
+        setAssignusr(payload)
+     }
             showSuccessMessage('Task Created!', 'The Task was added successfully.');
       
       setTaskForm({
@@ -97,6 +136,7 @@ const Page = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(tasks.filter((task) => task._id !== id));
+      showSuccessMessage('Task Deleted!', 'The Task was deleted successfully.');
     } catch (err) {
       console.error('Error deleting task:', err);
     }
@@ -168,6 +208,20 @@ const Page = () => {
 
         )} 
 
+<div className="mb-4">
+        <label className="block text-gray-700 mb-2">Filter by Status:</label>
+        <select
+          value={statusFilter}
+          onChange={handleStatusChange}
+          className="p-2 border rounded-lg w-full sm:w-auto"
+        >
+          <option value="">All</option>
+          <option value="to-do">To-Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto bg-white border rounded shadow">
           <thead className="bg-gray-100">
@@ -195,6 +249,7 @@ const Page = () => {
                 <td className="border px-4 py-2">
                   {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'N/A'}
                 </td>
+                {task?.status !== 'done' && (
                 <td className="border px-4 py-2 space-x-2">
                   <button onClick={() => handleEdit(task)} className="bg-yellow-500 text-white px-2 py-1 rounded">
                     Edit
@@ -203,6 +258,7 @@ const Page = () => {
                     Delete
                   </button>
                 </td>
+                )}
               </tr>
             )))}
           </tbody>

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Task from './models/task.model.js'; // Replace with your Task model path
-import User from './models/user.model.js'; // Replace with your User model path
-import Project from './models/project.model.js'; // Replace with your User model path
+import Task from './models/task.model.js'; 
+import User from './models/user.model.js';
+import Project from './models/project.model.js';
 
 dotenv.config();
 
@@ -30,14 +30,11 @@ const projects = [
 // Seed function
 const seedDatabase = async () => {
   try {
-    // Clear existing data
     await User.deleteMany();
     await Task.deleteMany();
-    await Project.deleteMany(); // Clear projects if needed
-
-    // Insert dummy data
+    await Project.deleteMany();
     const createdUsers = await User.insertMany(users);
-    const userId = createdUsers[0]._id; // Assign tasks to the first user
+    const userId = createdUsers[0]._id;
     const projecthandle = await Project.insertMany(projects); // In
     const projectid = projecthandle[0]._id;
     const tasksWithProject = tasks.map((task) => ({ ...task, project: projectid,assignedUser: userId }));

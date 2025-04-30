@@ -1,16 +1,30 @@
 const Task = require('../models/task.model.js');
 
 exports.createTask = async (req, res) => {
-  const task = await Task.create(req.body);
+  const { title, description, priority, status, project, assignedUser } = req.body;
+const task =  await Task.create({
+    title,
+    description,
+    priority,
+    status,
+    project,
+    assignedUser
+  });
+   
   res.status(201).json(task);
 };
 
 exports.getTasksByProject = async (req, res) => {
     try {
       const { projectId } = req.params;
+      const {status} = req.query;
       const { role, _id: userId } = req.user;
   
       let query = { project: projectId };
+
+      if (status) {
+        query.status = status; // Filter by status if provided
+      }
   
       // If not admin (case-insensitive), limit to tasks assigned to the user
       if (role.toLowerCase() !== 'admin') {

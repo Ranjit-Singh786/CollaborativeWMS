@@ -9,7 +9,7 @@ import { Header } from "@/layouts/header";
 import { cn } from "@/utils/cn";
 import { useEffect, useRef, useState } from "react";
 
-const Layout = () => {
+const Layout = ({socket}) => {
     const isDesktopDevice = useMediaQuery("(min-width: 768px)");
     const [collapsed, setCollapsed] = useState(!isDesktopDevice);
 
@@ -41,6 +41,7 @@ const Layout = () => {
                 <Header
                     collapsed={collapsed}
                     setCollapsed={setCollapsed}
+                    socket={socket}
                 />
                 <div className="h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden p-6">
                     <Outlet />
