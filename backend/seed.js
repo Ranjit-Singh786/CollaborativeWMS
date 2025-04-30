@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import Task from './models/task.model.js'; 
 import User from './models/user.model.js';
 import Project from './models/project.model.js';
-
+import bcrypt from 'bcryptjs';
 dotenv.config();
 
 // Connect to MongoDB
@@ -17,6 +17,20 @@ const users = [
   { name: 'John Doe', email: 'johnadmin@example.com', password: 'password123', role: 'Admin' },
   { name: 'Jane Smith', email: 'jane@example.com', password: 'password123', role: 'User' },
 ];
+
+// Hash passwords
+const hashPassword = async (users) => {
+  for (let user of users) {
+    user.password = await bcrypt.hash(user.password, 10);
+  }
+  return users;
+};
+
+
+const hashedUsers = await hashPassword(users);
+
+// Dummy tasks and projects
+
 
 const tasks = [
   { title: 'Task 1', description: 'Description for Task 1', priority: 'high', status: 'to-do' },
@@ -33,7 +47,7 @@ const seedDatabase = async () => {
     await User.deleteMany();
     await Task.deleteMany();
     await Project.deleteMany();
-    const createdUsers = await User.insertMany(users);
+    const createdUsers = await User.insertMany(hashedUsers);
     const userId = createdUsers[0]._id;
     const projecthandle = await Project.insertMany(projects); // In
     const projectid = projecthandle[0]._id;
