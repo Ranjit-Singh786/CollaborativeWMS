@@ -21,7 +21,7 @@ const Page = () => {
 const getProjects =()=>{
     if (token) {
     axios
-    .get('http://localhost:5000/api/projects', {
+    .get(process.env.BASE_URL+'/api/projects', {
       headers: {
         Authorization: `Bearer ${token}`, // Add token to header
       },
@@ -52,7 +52,7 @@ const getProjects =()=>{
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/projects', newProject, {
+      const response = await axios.post(process.env.BASE_URL+'/api/projects', newProject, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +88,7 @@ const getProjects =()=>{
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/projects/${editingProject._id}`,
+        process.env.BASE_URL+`/api/projects/${editingProject._id}`,
         newProject,
         {
             headers: {
@@ -118,7 +118,7 @@ const getProjects =()=>{
   // Delete Project
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/projects/${id}`, {
+      await axios.delete(process.env.BASE_URL+`/api/projects/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

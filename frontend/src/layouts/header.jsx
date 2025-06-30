@@ -62,7 +62,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
         try {
           // Call logout API
           const token = localStorage.getItem('token');
-          await axios.get('http://localhost:5000/api/auth/logout', {
+          await axios.get(process.env.BASE_URL+'/api/auth/logout', {
             headers: {
               Authorization: `Bearer ${token}`,
             }

@@ -33,7 +33,7 @@ const Page = () => {
   function getTasks(){
     if (!projectId) return;
     axios
-      .get(`http://localhost:5000/api/tasks/project/${projectId}`, {
+      .get(process.env.BASE_URL+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` }, params: {
           status: statusFilter, 
         },
@@ -51,14 +51,14 @@ const Page = () => {
   useEffect(() => {
     if (!projectId) return;
     axios
-      .get(`http://localhost:5000/api/tasks/project/${projectId}`, {
+      .get(process.env.BASE_URL+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setTasks(res.data))
       .catch((err) => console.error('Error fetching tasks:', err));
 
       axios
-      .get(`http://localhost:5000/api/projects/getuser`, {
+      .get(process.env.BASE_URL+`/api/projects/getuser`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setUsers(res.data))
@@ -83,8 +83,8 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = editingTaskId
-      ? `http://localhost:5000/api/tasks/${editingTaskId}`
-      : 'http://localhost:5000/api/tasks';
+      ? process.env.BASE_URL+`/api/tasks/${editingTaskId}`
+      : process.env.BASE_URL+'/api/tasks';
 
     const method = editingTaskId ? axios.put : axios.post;
     const payload = { ...taskForm, project: projectId };
@@ -134,7 +134,7 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+      await axios.delete(process.env.BASE_URL+`/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(tasks.filter((task) => task._id !== id));

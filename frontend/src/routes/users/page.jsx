@@ -19,7 +19,7 @@ const Page = () => {
 const getusers =()=>{
     if (token) {
     axios
-    .get('http://localhost:5000/api/auth', {
+    .get(process.env.BASE_URL+'/api/auth', {
       headers: {
         Authorization: `Bearer ${token}`, // Add token to header
       }
@@ -46,7 +46,7 @@ const getusers =()=>{
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', newuser,{ headers: {
+      const response = await axios.post(process.env.BASE_URL+'/api/auth/register', newuser,{ headers: {
         Authorization: `Bearer ${token}`, // Add token to header
       }
     });
@@ -80,7 +80,7 @@ const getusers =()=>{
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/auth/${editinguser._id}`,
+        process.env.BASE_URL+`/api/auth/${editinguser._id}`,
         newuser,
         {
             headers: {
@@ -109,7 +109,7 @@ const getusers =()=>{
   // Delete user
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/auth/${id}`, {
+      await axios.delete(process.env.BASE_URL+`/api/auth/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
