@@ -32,8 +32,9 @@ const Page = () => {
 
   function getTasks(){
     if (!projectId) return;
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
     axios
-      .get(process.env.BASE_URL+`/api/tasks/project/${projectId}`, {
+      .get(baseUrl+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` }, params: {
           status: statusFilter, 
         },
@@ -50,15 +51,16 @@ const Page = () => {
   // Fetch tasks for a given project
   useEffect(() => {
     if (!projectId) return;
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
     axios
-      .get(process.env.BASE_URL+`/api/tasks/project/${projectId}`, {
+      .get(baseUrl+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setTasks(res.data))
       .catch((err) => console.error('Error fetching tasks:', err));
 
       axios
-      .get(process.env.BASE_URL+`/api/projects/getuser`, {
+      .get(baseUrl+`/api/projects/getuser`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setUsers(res.data))
@@ -82,9 +84,10 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
     const endpoint = editingTaskId
-      ? process.env.BASE_URL+`/api/tasks/${editingTaskId}`
-      : process.env.BASE_URL+'/api/tasks';
+      ? baseUrl+`/api/tasks/${editingTaskId}`
+      : baseUrl+'/api/tasks';
 
     const method = editingTaskId ? axios.put : axios.post;
     const payload = { ...taskForm, project: projectId };
@@ -134,7 +137,8 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(process.env.BASE_URL+`/api/tasks/${id}`, {
+      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      await axios.delete(baseUrl+`/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(tasks.filter((task) => task._id !== id));

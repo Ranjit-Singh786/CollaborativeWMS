@@ -20,8 +20,10 @@ const Page = () => {
   const role = localStorage.getItem('role');
 const getProjects =()=>{
     if (token) {
+        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+
     axios
-    .get(process.env.BASE_URL+'/api/projects', {
+    .get(baseUrl+'/api/projects', {
       headers: {
         Authorization: `Bearer ${token}`, // Add token to header
       },
@@ -52,7 +54,8 @@ const getProjects =()=>{
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(process.env.BASE_URL+'/api/projects', newProject, {
+      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      const response = await axios.post(baseUrl+'/api/projects', newProject, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -87,8 +90,9 @@ const getProjects =()=>{
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
       const response = await axios.put(
-        process.env.BASE_URL+`/api/projects/${editingProject._id}`,
+        baseUrl+`/api/projects/${editingProject._id}`,
         newProject,
         {
             headers: {
@@ -118,7 +122,8 @@ const getProjects =()=>{
   // Delete Project
   const handleDelete = async (id) => {
     try {
-      await axios.delete(process.env.BASE_URL+`/api/projects/${id}`, {
+      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      await axios.delete(baseUrl+`/api/projects/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

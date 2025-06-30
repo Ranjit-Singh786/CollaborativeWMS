@@ -62,7 +62,8 @@ export const Header = ({ collapsed, setCollapsed }) => {
         try {
           // Call logout API
           const token = localStorage.getItem('token');
-          await axios.get(process.env.BASE_URL+'/api/auth/logout', {
+          const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+          await axios.get(baseUrl+'/api/auth/logout', {
             headers: {
               Authorization: `Bearer ${token}`,
             }
@@ -110,7 +111,8 @@ export const Header = ({ collapsed, setCollapsed }) => {
         console.log('Fetching notifications...');
         const token = localStorage.getItem('token');
         // const userId = JSON.parse(localStorage.getItem('user'))?.id; 
-        const response = await axios.get('http://localhost:5000/api/notifications', {
+        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+        const response = await axios.get(baseUrl+'/api/notifications', {
           headers: {
             Authorization: `Bearer ${token}`,
           }
