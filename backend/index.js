@@ -16,7 +16,7 @@ initSocket(server);
 
 app.use(express.json());
 app.use(cors({
-    origin: "https://collaborative-wms-8q6y.vercel.app/",
+    origin: "*",
     credentials: true,
 }));
 connectDB();
