@@ -8,7 +8,7 @@ const userSocketMap ={}; // userId => socketId
 function initSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: "*", // Use your frontend origin in production
+      origin: "https://collaborative-wms-8q6y.vercel.app/", // Use your frontend origin in production
       methods: ["GET", "POST"]
     }
   });
