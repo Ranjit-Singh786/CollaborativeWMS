@@ -15,7 +15,10 @@ const server = http.createServer(app);
 initSocket(server);
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://collaborative-wms-8q6y.vercel.app/",
+    credentials: true,
+}));
 connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
