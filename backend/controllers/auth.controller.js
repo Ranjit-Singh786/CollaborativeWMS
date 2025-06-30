@@ -4,11 +4,11 @@ const BlacklistTokenModel = require('../models/blacklisttoken.model.js');
 
 exports.register = async (req, res) => {
   try {
-    const userFind = await User.findOne({email:req.body?.email});
-    if(userFind){
-         return res.status(400).json({message:"User already exist"});
-    }
-    const user = await User.create(req.body);
+    // const userFind = await User.findOne({email:req.body?.email});
+    // if(userFind){
+    //      return res.status(400).json({message:"User already exist"});
+    // }
+    await User.create(req.body);
     res.status(201).json({ message: 'User registered',status:201 });
   } catch (err) {
     res.status(400).json({ error: err.message });
