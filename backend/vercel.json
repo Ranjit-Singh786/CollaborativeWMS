@@ -18,12 +18,6 @@
       ]
     }
   ],
-  "rewrites": [
-      {
-        "source": "/(.*)",
-        "dest": "/frontend/build/index.html"
-      }
-    ],
  "routes": [
   {
    "src": "/(.*)",
