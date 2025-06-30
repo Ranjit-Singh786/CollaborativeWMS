@@ -27,7 +27,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
         axios.get(baseUrl+'/api/projects/getDashboardSummary', {
           headers: {
             Authorization: `Bearer ${token}`  // Attach token here

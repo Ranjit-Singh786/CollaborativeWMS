@@ -32,7 +32,7 @@ const Page = () => {
 
   function getTasks(){
     if (!projectId) return;
-    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+    const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     axios
       .get(baseUrl+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` }, params: {
@@ -51,7 +51,7 @@ const Page = () => {
   // Fetch tasks for a given project
   useEffect(() => {
     if (!projectId) return;
-    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+    const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     axios
       .get(baseUrl+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -84,7 +84,7 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+    const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     const endpoint = editingTaskId
       ? baseUrl+`/api/tasks/${editingTaskId}`
       : baseUrl+'/api/tasks';
@@ -137,7 +137,7 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
-      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
       await axios.delete(baseUrl+`/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });

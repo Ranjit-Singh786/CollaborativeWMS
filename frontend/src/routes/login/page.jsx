@@ -32,7 +32,7 @@ const LoginPage = ({socket}) => {
     onSubmit: async(values) => {
       console.log('Form submitted:', values);
       try {
-        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
         const response = await axios.post(baseUrl+'/api/auth/login', {
           email: values.email,
           password: values.password,

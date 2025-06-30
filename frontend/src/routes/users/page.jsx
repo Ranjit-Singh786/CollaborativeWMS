@@ -18,7 +18,7 @@ const Page = () => {
   const role = localStorage.getItem('role');
 const getusers =()=>{
     if (token) {
-        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     axios
     .get(baseUrl+'/api/auth', {
       headers: {
@@ -47,7 +47,7 @@ const getusers =()=>{
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
       const response = await axios.post(baseUrl+'/api/auth/register', newuser,{ headers: {
         Authorization: `Bearer ${token}`, // Add token to header
       }
@@ -81,7 +81,7 @@ const getusers =()=>{
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
       const response = await axios.put(
         baseUrl+`/api/auth/${editinguser._id}`,
         newuser,
@@ -112,7 +112,7 @@ const getusers =()=>{
   // Delete user
   const handleDelete = async (id) => {
     try {
-      const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
       await axios.delete(baseUrl+`/api/auth/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,

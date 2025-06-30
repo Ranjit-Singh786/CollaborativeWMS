@@ -31,7 +31,7 @@ const Page = () => {
       // Handle form submission here
       console.log('Form submitted:', values);
       try {
-        const response = await axios.post(process.env.BASE_URL+'/api/auth/register', {
+        const response = await axios.post("https://collaborative-wms-bakend.vercel.app"+'/api/auth/register', {
           email: values.email,
           password: values.password,
           name: values.name,
