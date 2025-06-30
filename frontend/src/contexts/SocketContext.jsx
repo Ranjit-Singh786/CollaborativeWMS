@@ -7,7 +7,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketInit = io("http://localhost:5000");
+    const socketInit = io("https://collaborative-wms-bakend.vercel.app/");
     socketInit.on("connect", () => {
       console.log("Socket connected", socketInit.id);
       setSocket(socketInit);
