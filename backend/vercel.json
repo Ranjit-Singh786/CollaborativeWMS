@@ -9,7 +9,7 @@
  ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/index.js",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "https://collaborative-wms-8q6y.vercel.app" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
