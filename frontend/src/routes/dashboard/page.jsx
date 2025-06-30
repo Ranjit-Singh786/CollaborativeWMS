@@ -26,8 +26,9 @@ const DashboardPage = () => {
     
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); // or whichever key you store the token under
-        axios.get('http://localhost:5000/api/projects/getDashboardSummary', {
+        const token = localStorage.getItem('token');
+        console.log(process.env.BASE_URL)
+        axios.get(process.env.BASE_URL+'/api/projects/getDashboardSummary', {
           headers: {
             Authorization: `Bearer ${token}`  // Attach token here
           }
