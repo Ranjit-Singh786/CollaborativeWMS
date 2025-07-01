@@ -5,10 +5,10 @@ const Notification = require("./models/notification.model.js");
 let io;
 const userSocketMap ={}; // userId => socketId
 
-function initSocket(server) {
+function initSocket(server,corsOptions) {
   io = new Server(server, {
     cors: {
-      origin: "https://collaborative-wms-8q6y.vercel.app/", // Use your frontend origin in production
+      origin: corsOptions, // Use your frontend origin in production
       methods: ["GET", "POST"]
     }
   });
