@@ -5,21 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from "axios";
 
-const LoginPage = ({socket}) => {
+const LoginPage = () => {
   const [user, setUser] = React.useState({});
-  useEffect(() => {
-    console.log(user, 'user from local storage');
-    if (user) {
-      socket?.emit("register_user", user.id);
-    }
-    //disconnect socket on unmount
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-
-  }, [user]);
 
     const navigate = useNavigate();
     
