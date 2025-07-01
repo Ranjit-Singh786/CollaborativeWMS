@@ -12,6 +12,13 @@ const LoginPage = ({socket}) => {
     if (user) {
       socket?.emit("register_user", user.id);
     }
+    //disconnect socket on unmount
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+
   }, [user]);
 
     const navigate = useNavigate();
