@@ -13,19 +13,20 @@ const socketIo = require('socket.io');
 const server = http.createServer(app);
 
 
-app.use(express.json());
-  const allowedOrigins = ['https://collaborative-wms-8q6y.vercel.app'];
-  const corsOptions = {
+const allowedOrigins = ['https://collaborative-wms-8q6y.vercel.app'];
+const corsOptions = {
       origin: function (origin, callback) {
           if (allowedOrigins.includes(origin) || !origin) {
            callback(null, true)
          } else {
            callback(new Error('Not allowed by CORS'))
-         }
-       },
-       credentials: true
-    };
-    initSocket(server,corsOptions);
+        }
+    },
+    credentials: true
+};
+initSocket(server,corsOptions);
+app.use(express.json());
+app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 connectDB();
 app.use('/api/auth', authRoutes);

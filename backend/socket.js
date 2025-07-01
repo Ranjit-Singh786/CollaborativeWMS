@@ -8,8 +8,9 @@ const userSocketMap ={}; // userId => socketId
 function initSocket(server,corsOptions) {
   io = new Server(server, {
     cors: {
-      origin: corsOptions, // Use your frontend origin in production
-      methods: ["GET", "POST"]
+      origin:  corsOptions.origin, // Use your frontend origin in production
+      methods: ["GET", "POST"],
+      credentials: corsOptions.credentials
     }
   });
 
