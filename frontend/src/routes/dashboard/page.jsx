@@ -27,7 +27,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        axios.get(import.meta.env.SOCKET_URL+'/api/projects/getDashboardSummary', {
+        axios.get(import.meta.env.VITE_SOCKET_URL+'/api/projects/getDashboardSummary', {
           headers: {
             Authorization: `Bearer ${token}`  // Attach token here
           }
@@ -54,9 +54,9 @@ const DashboardPage = () => {
                     </div>
                     <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
                     <NavLink to="/projects" className="block">
-                        <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Open : {data?.projectSummary?.open}</p>
+                        <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Open : {data?.projectSummary?.open ?? 0}</p>
                         <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">In-Progress : {data?.projectSummary?.["in-progress"] ?? 0}</p>
-                        <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Completed : {data?.projectSummary?.completed}</p>
+                        <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Completed : {data?.projectSummary?.completed ?? 0}</p>
                         {/* <span className="flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600"> */}
                             {/* <TrendingUp size={18} />
                             25% */}
@@ -74,7 +74,7 @@ const DashboardPage = () => {
                     <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
                         <NavLink to="/projects" className="block">
                             <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Done:
-                            {data?.taskSummary?.done}
+                            {data?.taskSummary?.done ?? 0}
                             </p>
                             <p className="font-bold  text-slate-900 transition-colors dark:text-slate-50">To-do:
                             {data?.taskSummary?.["to-do"]??0}

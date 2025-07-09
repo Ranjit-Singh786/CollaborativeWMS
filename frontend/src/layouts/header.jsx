@@ -103,12 +103,12 @@ export const Header = ({ collapsed, setCollapsed }) => {
       console.log('Project ID:', taskData.projectid);
       let arr = [{message: taskData.message, projectid: taskData.projectid,read:false}];
       setTaskData(arr);
+       setShowNotifications(true);
       console.log('Task Data:', taskData);
 
-      // ... further processing
     });
 
-    //fetch notification
+   
    async function fetchNotifications(){
       try {
         console.log('Fetching notifications...');
@@ -243,17 +243,17 @@ useEffect(() => {
         </div>
       )}
     </div>
-                <div className="relative" onMouseLeave={handleMouseLeave}>
-                <button
-                    className="size-10 overflow-hidden rounded-full"
-                    onMouseEnter={handleMouseEnter}
-                >
-                    <img
-                    src={profileImg}
-                    alt="profile image"
-                    className="size-full object-cover"
-                    />
-                </button>
+      <div className="relative" onMouseLeave={handleMouseLeave}>
+              <button
+                  className="size-10 overflow-hidden rounded-full"
+                  onMouseEnter={handleMouseEnter}
+              >
+                  <img
+                  src={profileImg}
+                  alt="profile image"
+                  className="size-full object-cover"
+                  />
+              </button>
                 
                 {isDropdownOpen && (
                     <div className="absolute right-0 mt-0 w-40 bg-white shadow-lg rounded-lg">
