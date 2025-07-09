@@ -14,7 +14,9 @@ export const Header = ({ collapsed, setCollapsed }) => {
     const [taskData, setTaskData] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const navigate = useNavigate();
-    const socket = useSocket();
+    const {socket,connectSocket} = useSocket();
+    console.log(socket,'socket is here')
+    
   const handleMouseEnter = () => {
     setIsDropdownOpen(true);
   };
@@ -62,8 +64,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
         try {
           // Call logout API
           const token = localStorage.getItem('token');
-          const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-          await axios.get(baseUrl+'/api/auth/logout', {
+          await axios.get(import.meta.env.VITE_SOCKET_URL+'/api/auth/logout', {
             headers: {
               Authorization: `Bearer ${token}`,
             }
@@ -87,6 +88,8 @@ export const Header = ({ collapsed, setCollapsed }) => {
   };
   
   useEffect(() => {
+    console.log('Header component mounted');
+    connectSocket();
     if (!socket) {
       console.log('Socket is null or undefined');
       fetchNotifications();
@@ -110,9 +113,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
       try {
         console.log('Fetching notifications...');
         const token = localStorage.getItem('token');
-        // const userId = JSON.parse(localStorage.getItem('user'))?.id; 
-        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-        const response = await axios.get(baseUrl+'/api/notifications', {
+        const response = await axios.get(import.meta.env.VITE_SOCKET_URL+'/api/notifications', {
           headers: {
             Authorization: `Bearer ${token}`,
           }
@@ -137,6 +138,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
     }
   }
   }, []);
+
 
   useEffect(() => {
     console.log('Task data updated:', taskData);

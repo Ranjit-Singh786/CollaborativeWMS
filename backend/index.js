@@ -12,22 +12,13 @@ const http = require('http');
 const socketIo = require('socket.io');
 const server = http.createServer(app);
 
+initSocket(server);
 
-const allowedOrigins = ['https://collaborative-wms-8q6y.vercel.app'];
-const corsOptions = {
-      origin: function (origin, callback) {
-          if (allowedOrigins.includes(origin) || !origin) {
-           callback(null, true)
-         } else {
-           callback(new Error('Not allowed by CORS'))
-        }
-    },
-    credentials: true
-};
-initSocket(server,corsOptions);
 app.use(express.json());
-app.options('*', cors(corsOptions));
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: "*",
+    credentials: true,
+}));
 connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);

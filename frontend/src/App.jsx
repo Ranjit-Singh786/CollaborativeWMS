@@ -40,11 +40,12 @@ function App() {
       ]);
 
     return (
-      <SocketProvider>
         <ThemeProvider storageKey="theme">
+          <SocketProvider>
             <RouterProvider router={router} />
+          </SocketProvider>
+
         </ThemeProvider>
-        </SocketProvider>
     );
 }
 

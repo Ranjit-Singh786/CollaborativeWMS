@@ -20,10 +20,8 @@ const Page = () => {
   const role = localStorage.getItem('role');
 const getProjects =()=>{
     if (token) {
-        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-
     axios
-    .get(baseUrl+'/api/projects', {
+    .get(import.meta.env.VITE_SOCKET_URL+'/api/projects', {
       headers: {
         Authorization: `Bearer ${token}`, // Add token to header
       },
@@ -54,8 +52,7 @@ const getProjects =()=>{
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-      const response = await axios.post(baseUrl+'/api/projects', newProject, {
+      const response = await axios.post(import.meta.env.VITE_SOCKET_URL+'/api/projects', newProject, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,9 +87,8 @@ const getProjects =()=>{
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
       const response = await axios.put(
-        baseUrl+`/api/projects/${editingProject._id}`,
+        import.meta.env.VITE_SOCKET_URL+`/api/projects/${editingProject._id}`,
         newProject,
         {
             headers: {
@@ -122,8 +118,7 @@ const getProjects =()=>{
   // Delete Project
   const handleDelete = async (id) => {
     try {
-      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-      await axios.delete(baseUrl+`/api/projects/${id}`, {
+      await axios.delete(import.meta.env.VITE_SOCKET_URL+`/api/projects/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

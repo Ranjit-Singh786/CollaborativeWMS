@@ -21,7 +21,7 @@ const Page = () => {
     dueDate: '',
   });
   const [editingTaskId, setEditingTaskId] = useState(null);
-  const socket = useSocket();
+  const {socket} = useSocket();
 
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
@@ -32,9 +32,8 @@ const Page = () => {
 
   function getTasks(){
     if (!projectId) return;
-    const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     axios
-      .get(baseUrl+`/api/tasks/project/${projectId}`, {
+      .get(import.meta.env.VITE_SOCKET_URL+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` }, params: {
           status: statusFilter, 
         },
@@ -51,16 +50,15 @@ const Page = () => {
   // Fetch tasks for a given project
   useEffect(() => {
     if (!projectId) return;
-    const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     axios
-      .get(baseUrl+`/api/tasks/project/${projectId}`, {
+      .get(import.meta.env.VITE_SOCKET_URL+`/api/tasks/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setTasks(res.data))
       .catch((err) => console.error('Error fetching tasks:', err));
 
       axios
-      .get(baseUrl+`/api/projects/getuser`, {
+      .get(import.meta.env.VITE_SOCKET_URL+`/api/projects/getuser`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setUsers(res.data))
@@ -84,10 +82,9 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
     const endpoint = editingTaskId
-      ? baseUrl+`/api/tasks/${editingTaskId}`
-      : baseUrl+'/api/tasks';
+      ? import.meta.env.VITE_SOCKET_URL+`/api/tasks/${editingTaskId}`
+      : import.meta.env.VITE_SOCKET_URL+'/api/tasks';
 
     const method = editingTaskId ? axios.put : axios.post;
     const payload = { ...taskForm, project: projectId };
@@ -137,8 +134,7 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
-      const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-      await axios.delete(baseUrl+`/api/tasks/${id}`, {
+      await axios.delete(import.meta.env.VITE_SOCKET_URL+`/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(tasks.filter((task) => task._id !== id));

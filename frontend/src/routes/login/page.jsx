@@ -4,11 +4,13 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from "axios";
+import { useSocket } from "@/contexts/SocketContext";
 
 const LoginPage = () => {
-  const [user, setUser] = React.useState({});
+  console.log(import.meta.env.VITE_SOCKET_URL)
 
     const navigate = useNavigate();
+  const { connectSocket } = useSocket();
     
   const formik = useFormik({
     initialValues: {
@@ -26,14 +28,15 @@ const LoginPage = () => {
     onSubmit: async(values) => {
       console.log('Form submitted:', values);
       try {
-        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-        const response = await axios.post(baseUrl+'/api/auth/login', {
+       
+        const response = await axios.post(import.meta.env.VITE_SOCKET_URL+'/api/auth/login', {
           email: values.email,
           password: values.password,
         });
 
       if(response?.data?.status==201){
-        setUser(response?.data?.user);
+        // setUser(response?.data?.user);
+        connectSocket();
         localStorage.setItem("token",response?.data?.token);
         localStorage.setItem("role",response?.data?.user?.role);
         localStorage.setItem("user",JSON.stringify(response?.data?.user));

@@ -11,7 +11,7 @@ import { useSocket } from "@/contexts/SocketContext";
 const DashboardPage = () => {
     const [data, setData] = useState(null);
    
-    const socket = useSocket();
+    const {socket} = useSocket();
 
     useEffect(() => {
         if (socket) {
@@ -27,8 +27,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const baseUrl = "https://collaborative-wms-bakend.vercel.app" || 'http://localhost:5000';
-        axios.get(baseUrl+'/api/projects/getDashboardSummary', {
+        axios.get(import.meta.env.SOCKET_URL+'/api/projects/getDashboardSummary', {
           headers: {
             Authorization: `Bearer ${token}`  // Attach token here
           }
@@ -56,7 +55,7 @@ const DashboardPage = () => {
                     <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
                     <NavLink to="/projects" className="block">
                         <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Open : {data?.projectSummary?.open}</p>
-                        <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">In-Progress : {data?.projectSummary["in-progress"]}</p>
+                        <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">In-Progress : {data?.projectSummary?.["in-progress"] ?? 0}</p>
                         <p className="font-bold text-slate-900 transition-colors dark:text-slate-50">Completed : {data?.projectSummary?.completed}</p>
                         {/* <span className="flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600"> */}
                             {/* <TrendingUp size={18} />
@@ -78,10 +77,10 @@ const DashboardPage = () => {
                             {data?.taskSummary?.done}
                             </p>
                             <p className="font-bold  text-slate-900 transition-colors dark:text-slate-50">To-do:
-                            {data?.taskSummary["to-do"]}
+                            {data?.taskSummary?.["to-do"]??0}
                             </p>
                             <p className="font-bold  text-slate-900 transition-colors dark:text-slate-50">In-Progress:
-                            {data?.taskSummary['in-progress']}
+                            {data?.taskSummary?.['in-progress'] ?? 0}
                             </p>
                             {/* <span className="flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:border-blue-600 dark:text-blue-600">
                             <TrendingUp size={18} />
