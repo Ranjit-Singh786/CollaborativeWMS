@@ -9,7 +9,7 @@ export const SocketProvider = ({ children }) => {
   // Explicit connect function
   const connectSocket = useCallback(() => {
     if (!socket) {
-      const newSocket = io("http://localhost:5000", {
+      const newSocket = io("https://collaborative-wms-bakend.vercel.app", {
         withCredentials: false,
       });
       setSocket(newSocket);
